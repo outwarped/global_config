@@ -9,6 +9,7 @@ Automatic configuration data discovery in:
 * CLI arguments
 * python Modules
 * Strings
+* S3 compatible object store
 
 Configuration namespace is accessible as dictionary-like structure
 
