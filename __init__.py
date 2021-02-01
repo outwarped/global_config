@@ -7,4 +7,5 @@ from .conf_args import ConfigurationArgs
 from .conf_str import ConfigurationStr
 from .conf_module import ConfigurationModule
 from .conf_deployment import ConfigurationDeployment
+from .conf_s3 import ConfigurationS3
 from ._global import c as c
