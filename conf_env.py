@@ -2,8 +2,8 @@ import logging
 import operator
 from functools import reduce
 from functools import partial
-from exceptions import ConfigurationException
-from conf import Configuration
+from .exceptions import ConfigurationException
+from .conf import Configuration
 import os
 import re
 import json

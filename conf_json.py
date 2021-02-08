@@ -1,6 +1,6 @@
 import logging
-from conf import Configuration
-from exceptions import ConfigurationException
+from .conf import Configuration
+from .exceptions import ConfigurationException
 import json
 
 logger = logging.getLogger(__name__)

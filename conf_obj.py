@@ -1,7 +1,7 @@
 import logging
-from exceptions import ConfigurationException
-from conf_str import ConfigurationStr
-from conf import Configuration
+from .exceptions import ConfigurationException
+from .conf_str import ConfigurationStr
+from .conf import Configuration
 import glob
 
 logger = logging.getLogger(__name__)

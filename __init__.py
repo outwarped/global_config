@@ -1,4 +1,3 @@
-# from odk.octo.config.Configuration import Configuration, GlobalConfig, Parameters, Secrets, File, Environment, Literal
 from .conf import Configuration
 from .exceptions import ConfigurationException
 from .conf_env import ConfigurationEnviron
@@ -8,4 +7,4 @@ from .conf_str import ConfigurationStr
 from .conf_module import ConfigurationModule
 from .conf_deployment import ConfigurationDeployment
 from .conf_s3 import ConfigurationS3
-from ._global import c as c
+from .conf_global import c as c

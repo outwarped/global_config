@@ -1,8 +1,8 @@
 import logging
-from conf import Configuration
+from .conf import Configuration
 import json
 from pyhocon import HOCONConverter, ConfigFactory, ConfigTree
-from exceptions import ConfigurationException
+from .exceptions import ConfigurationException
 from typing import Union, Dict
 
 logger = logging.getLogger(__name__)

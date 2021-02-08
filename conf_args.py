@@ -1,6 +1,6 @@
 import logging
-from exceptions import ConfigurationException
-from conf import Configuration
+from .exceptions import ConfigurationException
+from .conf import Configuration
 import argparse
 
 logger = logging.getLogger(__name__)
@@ -15,6 +15,8 @@ class ConfigurationArgs(Configuration):
     def _set_arg_strings(self, args=None):
         if args == None:
             args = self._parser.parse_args()
+        if args.config is None:
+            return
         for arg in args.config:
             try:
                 key, sep, value = arg.partition('=')

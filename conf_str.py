@@ -1,9 +1,9 @@
 import logging
-from exceptions import ConfigurationException
-from conf_yaml import ConfigurationYaml
-from conf_json import ConfigurationJson
-from conf_hocon import ConfigurationHocon
-from conf import Configuration
+from .exceptions import ConfigurationException
+from .conf_yaml import ConfigurationYaml
+from .conf_json import ConfigurationJson
+from .conf_hocon import ConfigurationHocon
+from .conf import Configuration
 
 logger = logging.getLogger(__name__)
 

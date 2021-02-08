@@ -1,7 +1,7 @@
 import logging
-from exceptions import ConfigurationException
-from conf_str import ConfigurationStr
-from conf import Configuration
+from .exceptions import ConfigurationException
+from .conf_str import ConfigurationStr
+from .conf import Configuration
 from pathlib import Path
 from os import makedirs, access, W_OK
 from os.path import getmtime, dirname

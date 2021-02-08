@@ -1,6 +1,6 @@
 import logging
-from exceptions import ConfigurationException
-from conf_str import ConfigurationStr
+from .exceptions import ConfigurationException
+from .conf_str import ConfigurationStr
 import boto3
 import io
 

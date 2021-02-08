@@ -2,7 +2,7 @@ import logging
 import operator
 from functools import reduce
 from functools import partial
-from exceptions import ConfigurationException
+from .exceptions import ConfigurationException
 from typing import Optional, Union, Dict, Collection, Any
 
 
