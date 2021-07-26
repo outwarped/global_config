@@ -14,7 +14,7 @@ class ConfigurationFiles(Configuration):
         for path in glob.glob(pathname):
             try:
                 with open(path) as f:
-                    c = c + ConfigurationStr(f.read())
+                    c = c + ConfigurationStr(f)
             except ConfigurationException as e:
                 error = e
         super(ConfigurationFiles, self).__init__(c)

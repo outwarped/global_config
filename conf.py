@@ -1,8 +1,6 @@
 import logging
 import operator
 from functools import reduce
-from functools import partial
-from .exceptions import ConfigurationException
 from typing import Optional, Union, Dict, Collection, Any
 
 
@@ -52,16 +50,53 @@ class Configuration(object):
         except AttributeError:
             return self.get_at(item)
     
+    @staticmethod
+    def _is_native(o) -> bool:
+        _native = False
+        if not _native and isinstance(o, str):
+            _native = True
+        if not _native and isinstance(o, bytes):
+            _native = True
+        if not _native and isinstance(o, float):
+            _native = True
+        if not _native and isinstance(o, int):
+            _native = True
+        if not _native and isinstance(o, type(None)):
+            _native = True
+        if not _native and isinstance(o, list):
+            _native = True
+        if not _native and isinstance(o, dict):
+            _native = True
+        
+        return _native
+    
     def as_dict(self)->Optional[Dict]:
         """Returns current configuration object as python dict
 
         Returns:
             Optional[Dict]: dict representation
         """
-        d = {}
+        
+        if isinstance(self._config_object, Configuration) and (self._is_native(self._config_object._config_object) or not hasattr(self._config_object._config_object, "__iter__")):
+            return self._config_object._config_object
+        if not hasattr(self._config_object, "__iter__"):
+            return self._config_object
+        if isinstance(self._config_object, list):
+            return self._config_object
+        if isinstance(self._config_object, str):
+            return self._config_object
+        if isinstance(self._config_object, int):
+            return self._config_object
+        if isinstance(self._config_object, float):
+            return self._config_object
+        if isinstance(self._config_object, bytes):
+            return self._config_object
+        # if self._is_native(self._config_object):
+        #     return self._config_object
+        d = {}        
         for key, value in self._config_object.items():
             _value = value.as_dict() if isinstance(value, Configuration) else value
-            d.update({key:_value})
+            d.update({key:_value})        
         return d
     
     def __str__(self):
@@ -75,7 +110,9 @@ class Configuration(object):
 
     def get_at(self, path:str, convert:bool=True)->Optional[Union['Configuration', Any]]:
         """Returns Configuration branch at given address
-
+        Args:
+            path (Union[str,int]): path to get
+            convert (Boolean): (deprecated) Embed target into Configuration object if if target element is an iterable
         Returns:
             [type]: [description]
         """
@@ -84,10 +121,13 @@ class Configuration(object):
                 res = operator.getitem(self._config_object, path)
             else:
                 res = reduce(operator.getitem, path.split('.'), self._config_object)
-            if convert and ( type(res) == dict or type(res) == list):
-                res = self._to_config_object(res)
+            # if convert and ( type(res) == dict or type(res) == list):
+            #     res = self._to_config_object(res)
         except (KeyError, TypeError) as e:
             return None
+        
+        if isinstance(res, Configuration) and self._is_native(res._config_object):
+            return res.as_dict()
         return res
     
     def exists(self, path:Union[str,int])->bool:
@@ -162,6 +202,10 @@ class Configuration(object):
     #         super(Configuration, self).__setattr__(name, value)
     #     else:
     #         self.set_at(name, value)
+    
+    def __len__(self):
+        return len(self.as_dict())
+
             
     def write(self, stream):
         raise NotImplementedError

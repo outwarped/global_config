@@ -1,12 +1,9 @@
 import logging
-import operator
-from functools import reduce
-from functools import partial
 from .exceptions import ConfigurationException
 from .conf import Configuration
+from .conf_str import ConfigurationStr
 import os
 import re
-import json
 
 
 logger = logging.getLogger(__name__)
@@ -26,6 +23,14 @@ class ConfigurationEnviron(Configuration):
             res = list(map(lambda kv: ('.'.join(filter(lambda x: x != "", kv[0].split("_"))), kv[1]) , res))
         if to_lower:
             res = list(map(lambda kv: (kv[0].lower(), kv[1]) , res))
-            
-        for key,value in res:
+        res_ = res
+        res_ = []
+        for kv in res:
+            try:
+                conf = ConfigurationStr(kv[1]).as_dict()
+            except Exception as e:
+                conf = kv[1]
+            finally:
+                res_.append((kv[0], conf))
+        for key,value in res_:
             self[key] = value

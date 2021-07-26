@@ -3,6 +3,7 @@ from .exceptions import ConfigurationException
 from .conf_yaml import ConfigurationYaml
 from .conf_json import ConfigurationJson
 from .conf_hocon import ConfigurationHocon
+from .conf_scalar import ConfigurationScalar
 from .conf import Configuration
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,12 @@ class ConfigurationStr(Configuration):
         c = None
         error = []
         if type(stream) != dict:
+            try:
+                if c is None:
+                    c = ConfigurationScalar(stream)
+            except Exception as e:
+                error.append(e)
+                
             try:
                 if c is None:
                     c = ConfigurationJson(stream)

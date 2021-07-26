@@ -14,7 +14,10 @@ class ConfigurationArgs(Configuration):
 
     def _set_arg_strings(self, args=None):
         if args == None:
-            args = self._parser.parse_args()
+            try:
+                args, _ = self._parser.parse_known_args()
+            except Exception as e:
+                return
         if args.config is None:
             return
         for arg in args.config:

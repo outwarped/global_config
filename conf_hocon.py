@@ -28,6 +28,13 @@ class ConfigurationHocon(Configuration):
             fallback_config = ConfigFactory.from_dict({})
             res = ConfigFactory.parse_string(s, resolve=False).with_fallback(fallback_config)
             if self.__use_json:
+                return json.loads(HOCONConverter.convert(res, 'json'))
+            return Configuration(res)
+        elif isinstance(s, bytes):
+            s = s.decode()
+            fallback_config = ConfigFactory.from_dict({})
+            res = ConfigFactory.parse_string(s, resolve=False).with_fallback(fallback_config)
+            if self.__use_json:
                 return Configuration(json.loads(HOCONConverter.convert(res, 'json')))
             return Configuration(res)
         raise ValueError("Cannot parse value", s)
