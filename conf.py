@@ -1,5 +1,6 @@
 import logging
 import operator
+import time
 from functools import reduce
 from typing import Optional, Union, Dict, Collection, Any
 
@@ -15,11 +16,19 @@ class Configuration(object):
         Args:
             c (Optional[Union[, optional): Use this object as Configuration source. Defaults to None (empty configuration).
         """
+        self._generation = 0
         super(Configuration, self).__init__()
         if c is None:
-            self._config_object = dict()    
+            self._config_object = dict()
         else:
             self._config_object = c
+            if isinstance(c, Configuration) and c._generation != 0:
+                self._on_update()
+            elif not isinstance(c, Configuration):
+                self._on_update()
+            
+    def _on_update(self, generation=None):
+        self._generation = time.time() if generation is None else generation
 
     @staticmethod
     def _to_config_object(o:Union['Configuration', Dict]) -> 'Configuration':
@@ -33,6 +42,11 @@ class Configuration(object):
             return o
         return Configuration(o)
     
+    def __eq__(self, other):
+        if self._generation == 0 and other is None:
+            return True
+        return super(Configuration, self).__eq__(other)
+
     def __getitem__(self, item):
         return self.get_at(item)
 
@@ -171,6 +185,12 @@ class Configuration(object):
         _type = type(self)
         res = merge(source, destination)
         c = _type(res)
+        if item._generation == self._generation:
+            c._on_update(0)
+        elif item._generation == 0:
+            c._on_update(self._generation)
+        elif self._generation == 0:
+            c._on_update(item._generation)
         return c
 
     # def set_at(self, path, value)->None:
@@ -196,6 +216,7 @@ class Configuration(object):
                 self._config_object[key] = c
         else:
             self._config_object[key] = value
+        self._on_update()
     
     # def __setattr__(self, name, value):
     #     if name in ['_config_object']:

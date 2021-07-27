@@ -88,3 +88,41 @@ class TestMethods(unittest.TestCase):
         val = c["a.b.c.d"]
         res = "value2"
         self.assertEqual(val, res)
+
+    def test_op05(self):
+        c = Configuration()
+        val = c._generation
+        res = 0
+        self.assertEqual(val, res)
+
+    def test_op06(self):
+        dict_config = {
+          "a": {
+            "b": {
+              "c": {
+                "d": "value2"
+              }
+            }    
+          }
+        }
+        c = Configuration(dict_config)
+        val = c._generation
+        res = 0
+        self.assertNotEquals(val, res)
+
+    def test_op07(self):
+        dict_config = {
+          "a": {
+            "b": {
+              "c": {
+                "d": "value2"
+              }
+            }    
+          }
+        }
+        c1 = Configuration(dict_config)
+        c2 = Configuration()
+        c = c1 + c2
+        val = c1._generation
+        res = c._generation
+        self.assertEqual(val, res)
